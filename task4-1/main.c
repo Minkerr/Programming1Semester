@@ -1,4 +1,4 @@
-#include "task4-1test.c"
+#include "binaryAdditionTest.h"
 
 int main() {
     runAllTestsTask4();
