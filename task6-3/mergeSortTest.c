@@ -1,4 +1,7 @@
-#include "mergeSort.c"
+#include "mergeSort.h"
+#include "list.h"
+#include <string.h>
+#include <stdio.h>
 
 bool testMergeSortCommonCaseName(){
     List* list = readFromFile("task6-3/input.txt");

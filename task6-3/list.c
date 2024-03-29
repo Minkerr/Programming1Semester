@@ -1,14 +1,10 @@
-
+#include "list.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 
 #define CAPACITY 256
-
-typedef enum SortingKey {
-    name, phone
-} SortingKey;
 
 typedef struct Node {
     char *name;

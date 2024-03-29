@@ -1,4 +1,4 @@
-#include "list.c"
+#include "list.h"
 
 List* mergeSort(List* list, SortingKey key) {
     int length = listLen(list);
