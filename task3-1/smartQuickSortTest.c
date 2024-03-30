@@ -1,5 +1,7 @@
-#include "task3-1.c"
+#include "smartQuickSort.h"
+#include "smartQuickSortTest.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 bool testQSortForEmptyArray() {
     int arr[] = {};

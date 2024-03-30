@@ -1,4 +1,4 @@
-#include "task3-1test.c"
+#include "smartQuickSortTest.h"
 
 int main() {
     runAllTestsTask3();

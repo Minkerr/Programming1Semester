@@ -1,3 +1,5 @@
+#include "smartQuickSort.h"
+
 #define THRESHOLD 10
 
 void swap(int *a, int *b) {
