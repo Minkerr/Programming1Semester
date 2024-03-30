@@ -1,5 +1,5 @@
 #include "mergeSort.h"
-#include "list.h"
+#include "list.c"
 #include <string.h>
 #include <stdio.h>
 
@@ -48,7 +48,7 @@ bool testMergeSortCommonCasePhone(){
 }
 
 bool testEmptyList(){
-    List* list = initialize();
+    List* list = initList();
     list = mergeSort(list, name);
     return isEmpty(list);
 }

@@ -19,7 +19,7 @@ typedef struct List {
 } List;
 
 
-List *initialize() {
+List *initList() {
     List *list = malloc(sizeof(List));
     list->head = list->tail = NULL;
     list->length = 0;
@@ -33,8 +33,8 @@ bool isEmpty(List *list) {
 void add(List *list, char *name, char *phone) {
     Node *newNode = malloc(sizeof(Node));
     list->length++;
-    newNode->name = calloc(CAPACITY, sizeof(char));
-    newNode->phone = calloc(CAPACITY, sizeof(char));
+    newNode->name = malloc(CAPACITY * sizeof(char));
+    newNode->phone = malloc(CAPACITY * sizeof(char));
     strcpy(newNode->name, name);
     strcpy(newNode->phone, phone);
     newNode->next = NULL;
@@ -78,7 +78,7 @@ void moveHeadToNewList(List* newList, List* oldList) {
 }
 
 List *mergeTwoListsByKey(List *first, List *second, enum SortingKey sortingKey) {
-    List *mergedList = initialize();
+    List *mergedList = initList();
 
     while (listLen(first) != 0 && listLen(second) != 0) {
         int comp;
@@ -107,7 +107,7 @@ List *mergeTwoListsByKey(List *first, List *second, enum SortingKey sortingKey) 
 }
 
 List* readFromFile(char* fileName) {
-    List* list = initialize();
+    List* list = initList();
     FILE* file = fopen(fileName, "r");
     char name[CAPACITY];
     char phone[CAPACITY];

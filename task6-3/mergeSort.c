@@ -5,8 +5,8 @@ List* mergeSort(List* list, SortingKey key) {
     if (length <= 1) {
         return list;
     }
-    List* left = initialize();
-    List* right = initialize();
+    List* left = initList();
+    List* right = initList();
     for (int i = 0; i < length / 2; i++){
         moveHeadToNewList(left, list);
     }

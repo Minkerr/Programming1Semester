@@ -8,7 +8,7 @@ typedef enum SortingKey {
 
 typedef struct List List;
 
-List *initialize();
+List *initList();
 
 bool isEmpty(List *list);
 
