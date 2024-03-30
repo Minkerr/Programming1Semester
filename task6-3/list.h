@@ -3,7 +3,7 @@
 #include "stdbool.h"
 
 typedef enum SortingKey {
-    name, phone
+    NAME, PHONE
 } SortingKey;
 
 typedef struct List List;

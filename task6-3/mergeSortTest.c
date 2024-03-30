@@ -5,7 +5,7 @@
 
 bool testMergeSortCommonCaseName(){
     List* list = readFromFile("task6-3/input.txt");
-    list = mergeSort(list, name);
+    list = mergeSort(list, NAME);
     bool res = true;
     if(strcmp(list->head->name, "John") != 0){
         res = false;
@@ -27,7 +27,7 @@ bool testMergeSortCommonCaseName(){
 
 bool testMergeSortCommonCasePhone(){
     List* list = readFromFile("task6-3/input.txt");
-    list = mergeSort(list, phone);
+    list = mergeSort(list, PHONE);
     bool res = true;
     if(strcmp(list->head->name, "Simone") != 0){
         res = false;
@@ -49,7 +49,7 @@ bool testMergeSortCommonCasePhone(){
 
 bool testEmptyList(){
     List* list = initList();
-    list = mergeSort(list, name);
+    list = mergeSort(list, NAME);
     return isEmpty(list);
 }
 

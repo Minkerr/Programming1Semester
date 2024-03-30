@@ -82,7 +82,7 @@ List *mergeTwoListsByKey(List *first, List *second, enum SortingKey sortingKey) 
 
     while (listLen(first) != 0 && listLen(second) != 0) {
         int comp;
-        if (sortingKey == phone) {
+        if (sortingKey == PHONE) {
             comp = strcmp(first->head->phone, second->head->phone);
         } else {
             comp = strcmp(first->head->name, second->head->name);
