@@ -120,3 +120,17 @@ int calculateRec(Node* node){
 int calculate(Tree *tree) {
     return calculateRec(tree->root);
 }
+
+void deleteTreeRecursive(Node* node) {
+    if (node == NULL) {
+        return;
+    }
+    deleteTreeRecursive(node->left);
+    deleteTreeRecursive(node->right);
+    free(node);
+}
+
+void deleteTree(Tree* tree) {
+    deleteTreeRecursive(tree->root);
+    free(tree);
+}

@@ -5,7 +5,9 @@
 
 bool testExpTree(){
     Tree *tree = parseTreeFromString(readStringFromFile("task7-2/input.txt"));
-    return calculate(tree) == 4;
+    bool res = calculate(tree) == 4;
+    deleteTree(tree);
+    return res;
 }
 
 void runAllTestsForTask7(){

@@ -5,6 +5,6 @@ int main() {
     Tree* tree = parseTreeFromString(readStringFromFile("task7-2/input.txt"));
     printTree(tree);
     runAllTestsForTask7();
-
+    deleteTree(tree);
     return 0;
 }
