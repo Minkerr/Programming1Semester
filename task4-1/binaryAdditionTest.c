@@ -1,20 +1,14 @@
-#include "binaryAddition.c"
+#include "binaryAddition.h"
 #include <stdbool.h>
 #include <stdio.h>
 
-bool testReverse() {
-    int a[] = {5, 4, 3, 2, 1};
-    reverse(a, 5);
-    return a[0] == 1 && a[1] == 2 && a[2] == 3 && a[3] == 4 && a[4] == 5;
-}
-
 bool testDecimalToBinary() {
     int num = -15;
-    int bin[32] = {};
+    int bin[INT_SIZE] = {};
     decimalToBinary(num, bin);
     bool result = true;
 
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < INT_SIZE; ++i) {
         if (28 <= i && i <= 30) {
             result = (bin[i] == 0);
         } else {
@@ -26,7 +20,7 @@ bool testDecimalToBinary() {
 }
 
 bool testBinaryToDecimal() {
-    int binary[32];
+    int binary[INT_SIZE] = {0};
     for (int i = 0; i < 32; i++) {
         binary[i] = 1;
     }
@@ -38,78 +32,82 @@ bool testBinaryToDecimal() {
 }
 
 bool testAddition13Minus15(){
-    int x[32];
-    int y[32];
-    int res[32];
+    int x[INT_SIZE] = {0};
+    int y[INT_SIZE] = {0};
+    int result[INT_SIZE] = {0};
     decimalToBinary(-15, x);
     decimalToBinary(13, y);
-    addition(x, y, res);
+    addition(x, y, result);
 
-    return binaryToDecimal(res) == -2;
+    return binaryToDecimal(result) == -2;
 }
 
 bool testAddition1Plus0(){
-    int x[32];
-    int y[32];
-    int res[32];
+    int x[INT_SIZE] = {0};
+    int y[INT_SIZE] = {0};
+    int result[INT_SIZE] = {0};
     decimalToBinary(1, x);
     decimalToBinary(0, y);
-    addition(x, y, res);
+    addition(x, y, result);
 
-    return binaryToDecimal(res) == 1;
+    return binaryToDecimal(result) == 1;
 }
 
 bool testAdditionMinus2Minus100(){
-    int x[32];
-    int y[32];
-    int res[32];
+    int x[INT_SIZE] = {0};
+    int y[INT_SIZE] = {0};
+    int result[INT_SIZE] = {0};
     decimalToBinary(-2, x);
     decimalToBinary(-100, y);
-    addition(x, y, res);
+    addition(x, y, result);
 
-    return binaryToDecimal(res) == -102;
+    return binaryToDecimal(result) == -102;
 }
 
-void runAllTestsTask4() {
-    if (testReverse()) {
+int runAllTestsTask4() {
+    int codeResult = 0;
+
+    if (testDecimalToBinary()) {
         printf("Test #1 for Task 4-1 has passed\n");
     } else {
         printf("Test #1 for Task 4-1 failed\n");
-    }
-
-    if (testDecimalToBinary()) {
-        printf("Test #2 for Task 4-1 has passed\n");
-    } else {
-        printf("Test #2 for Task 4-1 failed\n");
+        codeResult = -1;
     }
 
     if (testBinaryToDecimal()) {
+        printf("Test #2 for Task 4-1 has passed\n");
+    } else {
+        printf("Test #2 for Task 4-1 failed\n");
+        codeResult = -1;
+    }
+
+    if (testAddition13Minus15()) {
         printf("Test #3 for Task 4-1 has passed\n");
     } else {
         printf("Test #3 for Task 4-1 failed\n");
+        codeResult = -1;
     }
 
     if (testAddition13Minus15()) {
         printf("Test #4 for Task 4-1 has passed\n");
     } else {
         printf("Test #4 for Task 4-1 failed\n");
-    }
-
-    if (testAddition13Minus15()) {
-        printf("Test #4 for Task 4-1 has passed\n");
-    } else {
-        printf("Test #4 for Task 4-1 failed\n");
+        codeResult = -1;
     }
 
     if (testAddition1Plus0()) {
         printf("Test #5 for Task 4-1 has passed\n");
     } else {
         printf("Test #5 for Task 4-1 failed\n");
+        codeResult = -1;
     }
 
     if (testAdditionMinus2Minus100()) {
-        printf("Test #5 for Task 4-1 has passed\n");
+        printf("Test #6 for Task 4-1 has passed\n");
     } else {
-        printf("Test #5 for Task 4-1 failed\n");
+        printf("Test #6 for Task 4-1 failed\n");
+        codeResult = -1;
     }
+
+    return codeResult;
 }
