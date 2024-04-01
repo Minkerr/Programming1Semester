@@ -57,16 +57,11 @@ char *readStringFromFile(char *fileName) {
 
 int parseNumberFromString(char *str, int *i) {
     int result = 0;
-    int sign = 1;
-    if (str[(*i)] == '-') {
-        sign = -1;
+    sscanf(&str[(*i)], "%d", &result);
+    while (str[(*i)] >= '0' && str[(*i)] <= '9' || str[(*i)] == '-') {
         (*i)++;
     }
-    while (str[(*i)] >= '0' && str[(*i)] <= '9') {
-        result = result * 10 + (str[(*i)] - '0');
-        (*i)++;
-    }
-    return sign * result;
+    return result;
 }
 
 bool isOperation(char *str, int i) {
@@ -123,7 +118,7 @@ void printTreeRec(Node *node) {
 }
 
 void printTree(Tree *tree) {
-    if(tree == NULL) {
+    if (tree == NULL) {
         return;
     }
     printTreeRec(tree->root);
@@ -150,7 +145,7 @@ int calculateRec(Node *node) {
 }
 
 int calculate(Tree *tree) {
-    if(tree == NULL){
+    if (tree == NULL) {
         printf("Tree is NULL");
         return 0;
     }

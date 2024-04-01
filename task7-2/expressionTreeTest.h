@@ -1,4 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
+
 // run all tests for expression tree task
-int runAllTestsForTask7();
+bool runAllTestsForTask7();
