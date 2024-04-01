@@ -1,5 +1,4 @@
 #pragma once
 
-#include "stdbool.h"
-
-void runAllTestsForTask6();
+// run all tests for merge sort of the list task
+int runAllTestsForTask6();

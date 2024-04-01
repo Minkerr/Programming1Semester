@@ -1,5 +1,5 @@
 #include "mergeSortTest.h"
 
-int main(){
-    runAllTestsForTask6();
+int main() {
+    return runAllTestsForTask6();
 }

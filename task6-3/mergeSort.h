@@ -2,4 +2,5 @@
 
 #include "list.h"
 
-List* mergeSort(List* list, SortingKey key);
+// sorting the list by the selected parameter using the merge sort algorithm
+List *mergeSort(List *list, SortingKey key);

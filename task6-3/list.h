@@ -2,28 +2,50 @@
 
 #include "stdbool.h"
 
+#define MEMORY_ALLOCATION_ERROR (-1)
+
+// parameters by which the list can be sorted
 typedef enum SortingKey {
     NAME, PHONE
 } SortingKey;
 
-typedef struct List List;
+// one node of linked list, contains information about one element
+typedef struct Node {
+    char *name;
+    char *phone;
+    struct Node *next;
+} Node;
 
+// contains head and tail of linked list
+typedef struct List {
+    int length;
+    Node *head;
+    Node *tail;
+} List;
+
+// create new empty list
 List *initList();
 
+// check if the list is empty
 bool isEmpty(List *list);
 
-void add(List *list, char *name, char *phone);
+// add new element to the list
+int add(List *list, char *name, char *phone);
 
-void deleteHead(List* list);
+// delete list head and free the memory it used
+void deleteHead(List *list);
 
+// delete list and free the memory it used
 void deleteList(List *list);
 
-int listLen(List *list);
+// get length of the list
+int listLength(List *list);
 
-void moveHeadToNewList(List* newList, List* oldList);
+// remove head from old list and add it to new list
+void moveHeadToNewList(List *newList, List *oldList);
 
-List *mergeTwoListsByKey(List *first, List *second, enum SortingKey sortingKey);
+// create new list with data from file
+List *readFromFile(const char *fileName);
 
-List* readFromFile(char* fileName);
-
-void printList(List* list);
+// print list to the console
+void printList(List *list);
