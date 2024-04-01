@@ -1,3 +1,6 @@
 #pragma once
 
-void runAllTestsForTask12();
+#include <stdbool.h>
+
+// run all tests for real number lexer
+bool runAllTestsForTask12();

@@ -1,8 +1,7 @@
 #include "lexerTest.h"
-
-#include "stdbool.h"
-#include "stdio.h"
 #include "realNumberLexer.h"
+#include <stdbool.h>
+#include <stdio.h>
 
 bool testEmptyString() {
     return !isRealNumberRecordCorrect("");
@@ -44,74 +43,64 @@ bool testCorrectString4() {
     return isRealNumberRecordCorrect("222E+1000");
 }
 
-void runAllTestsForTask12(){
-    if(testCorrectString1()){
+bool runAllTestsForTask12() {
+    if (testCorrectString1()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testCorrectString2()){
+    if (testCorrectString2()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testCorrectString3()){
+    if (testCorrectString3()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testCorrectString4()){
+    if (testCorrectString4()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testEmptyString()){
+    if (testEmptyString()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testStringEndsWithE()){
+    if (testStringEndsWithE()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testStringEndsWithSignAfterE()){
+    if (testStringEndsWithSignAfterE()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testStringStartsWithDot()){
+    if (testStringStartsWithDot()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testStringWithTwoDots()){
+    if (testStringWithTwoDots()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 
-    if(testStringWithTwoE()){
+    if (testStringWithTwoE()) {
         printf("Test passed\n");
-    }
-    else {
+    } else {
         printf("Test failed\n");
     }
 }

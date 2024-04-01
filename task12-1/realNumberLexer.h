@@ -1,5 +1,6 @@
 #pragma once
 
-#include "stdbool.h"
+#include <stdbool.h>
 
-bool isRealNumberRecordCorrect(char* str);
+// Checks whether the entered string is a valid record of a real number
+bool isRealNumberRecordCorrect(const char *str);

@@ -1,5 +1,8 @@
 #include "lexerTest.h"
 
-int main(){
-    runAllTestsForTask12();
+int main() {
+    if (!runAllTestsForTask12()) {
+        return -1;
+    }
+    return 0;
 }

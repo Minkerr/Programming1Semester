@@ -1,5 +1,5 @@
 #include "realNumberLexer.h"
-#include "stdbool.h"
+#include <stdbool.h>
 
 enum State {
     FIRST_CHAR,
@@ -12,7 +12,7 @@ enum State {
     NOT_CORRECT
 };
 
-bool isRealNumberRecordCorrect(char* str) { //digit+ (. digit+)? (E(+ | -)? digit+)?
+bool isRealNumberRecordCorrect(const char *str) { //digit+ (. digit+)? (E(+ | -)? digit+)?
     int state = FIRST_CHAR;
 
     for (int i = 0; str[i] != '\0'; i++) {
