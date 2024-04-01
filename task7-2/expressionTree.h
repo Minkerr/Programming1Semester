@@ -1,13 +1,18 @@
 #pragma once
-
+// a binary tree that implements an expression tree that can calculate an expression
 typedef struct Tree Tree;
 
-char* readStringFromFile(char* fileName);
+// read string from file
+char *readStringFromFile(char *fileName);
 
-Tree* parseTreeFromString(char* str);
+// create a tree based on an expression in string
+Tree *parseTreeFromString(char *str);
 
-void printTree(Tree* tree);
+// print the tree as the expression it represents
+void printTree(Tree *tree);
 
-int calculate(Tree* tree);
+// calculate the value of expression in tree
+int calculate(Tree *tree);
 
-void deleteTree(Tree* tree);
+// delete tree and free memory
+void deleteTree(Tree *tree);
