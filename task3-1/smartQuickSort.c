@@ -34,10 +34,9 @@ void insertSort(int array[], int low, int high) {
 }
 
 void smartQsort(int array[], int low, int high) {
-    if (high - low + 1 <= THRESHOLD){
+    if (high - low + 1 <= THRESHOLD) {
         insertSort(array, low, high);
-    }
-    else {
+    } else {
         int bound = partition(array, low, high);
         smartQsort(array, low, bound - 1);
         smartQsort(array, bound + 1, high);
