@@ -7,22 +7,25 @@ typedef struct HashTable HashTable;
 HashTable *initTable();
 
 // add new word to hash table
-void addToTable(HashTable *table, char *word);
+int addToTable(HashTable *table, char *word);
 
 // delete table and free memory
 void deleteTable(HashTable *table);
 
 // read words from file and put them to table
-HashTable* readFileToTable(char* fileName);
+HashTable *readFileToTable(char *fileName);
 
 // print all hashes and words corresponding to the hash
-void printTable(HashTable * table);
+void printTable(HashTable *table);
+
+// print all words in hash table with their number of appearances
+void printWordsWithNumber(HashTable *table);
 
 //
-void printWordsWithNumber(HashTable * table);
-
 double getFillFactor(HashTable *table);
 
+// get max length of list in cell of table
 int getMaxListLength(HashTable *table);
 
+// get average length of list in cell of table
 double getAverageListLength(HashTable *table);

@@ -1,24 +1,27 @@
-#include "list.h"
+#include "list.c"
 
 #define TABLE_SIZE 11
 
 typedef struct HashTable {
     int size;
-    int filled;
+    int countData;
     List *table[TABLE_SIZE];
 } HashTable;
 
 HashTable *initTable() {
     HashTable *table = malloc(sizeof(HashTable));
+    if (table == NULL) {
+        return NULL;
+    }
     for (int i = 0; i < TABLE_SIZE; ++i) {
         table->table[i] = initList();
     }
-    table->filled = 0;
+    table->countData = 0;
     table->size = TABLE_SIZE;
     return table;
 }
 
-int hash(char *key) {
+int hash(const char *key) {
     int result = 0;
     for (int i = 0; key[i] != '\0'; i++) {
         result = (result + key[i]) % TABLE_SIZE;
@@ -26,12 +29,10 @@ int hash(char *key) {
     return result;
 }
 
-void addToTable(HashTable *table, char *word) {
+int addToTable(HashTable *table, char *word) {
     List *elementOfTable = table->table[hash(word)];
-    if (listLen(elementOfTable) == 0) {
-        table->filled++;
-    }
-    add(elementOfTable, word);
+    table->countData++;
+    return add(elementOfTable, word);
 }
 
 void deleteTable(HashTable *table) {
@@ -45,6 +46,9 @@ void deleteTable(HashTable *table) {
 HashTable *readFileToTable(char *fileName) {
     HashTable *table = initTable();
     FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        return NULL;
+    }
     char word[CAPACITY] = {0};
     while (fscanf_s(file, "%s ", word, CAPACITY) != EOF) {
         addToTable(table, word);
@@ -68,7 +72,7 @@ void printWordsWithNumber(HashTable *table) {
 }
 
 double getFillFactor(HashTable *table) {
-    return (double) (table->filled) / (table->size);
+    return (double) (table->countData) / (table->size);
 }
 
 int getMaxListLength(HashTable *table) {

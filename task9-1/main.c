@@ -1,11 +1,11 @@
 #include "hashTable.h"
-#include "hashTableTest.h"
+#include "hashTableTest.c"
 
 int main() {
-    if (runAllTestsForTask9()) {
+    if (!runAllTestsForTask9()) {
         return -1;
     }
-    HashTable* table = readFileToTable("task9-1/input.txt");
+    HashTable *table = readFileToTable("task9-1/input.txt");
     printTable(table);
     printWordsWithNumber(table);
     deleteTable(table);
