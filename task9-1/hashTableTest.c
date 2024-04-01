@@ -23,23 +23,30 @@ bool testGetFillFactor() {
     return res;
 }
 
-void runAllTestsForTask9() {
+bool runAllTestsForTask9() {
+    bool returnCode = true;
+
     if(testGetFillFactor()){
         printf("Test #1 passed\n");
     }
     else{
         printf("Test #1 failed\n");
+        returnCode = false;
     }
     if(testGetAverageListLength()){
         printf("Test #2 passed\n");
     }
     else{
         printf("Test #2 failed\n");
+        returnCode = false;
     }
     if(testGetMaxListLength()){
         printf("Test #3 passed\n");
     }
     else{
         printf("Test #3 failed\n");
+        returnCode = false;
     }
+
+    return returnCode;
 }

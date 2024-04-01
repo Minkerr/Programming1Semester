@@ -2,5 +2,5 @@
 
 #include "stdbool.h"
 
-void runAllTestsForTask9();
+bool runAllTestsForTask9();
 

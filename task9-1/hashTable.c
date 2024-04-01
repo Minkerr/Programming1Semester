@@ -27,8 +27,8 @@ int hash(char *key) {
 }
 
 void addToTable(HashTable *table, char *word) {
-    List *elementOfTable = (table->table[hash(word)]);
-    if(listLen(elementOfTable) == 0){
+    List *elementOfTable = table->table[hash(word)];
+    if (listLen(elementOfTable) == 0) {
         table->filled++;
     }
     add(elementOfTable, word);
@@ -39,20 +39,21 @@ void deleteTable(HashTable *table) {
         deleteList(table->table[i]);
     }
     free(table);
+    table = NULL;
 }
 
-HashTable* readFileToTable(char* fileName) {
-    HashTable* table = initTable();
-    FILE* file = fopen(fileName, "r");
-    char word[CAPACITY];
+HashTable *readFileToTable(char *fileName) {
+    HashTable *table = initTable();
+    FILE *file = fopen(fileName, "r");
+    char word[CAPACITY] = {0};
     while (fscanf_s(file, "%s ", word, CAPACITY) != EOF) {
-        addToTable(table, &word[0]);
+        addToTable(table, word);
     }
     fclose(file);
     return table;
 }
 
-void printTable(HashTable * table) {
+void printTable(HashTable *table) {
     for (int i = 0; i < TABLE_SIZE; i++) {
         printf("hash: %d\nelements:\n", i);
         printList(table->table[i]);
@@ -60,14 +61,14 @@ void printTable(HashTable * table) {
     }
 }
 
-void printWordsWithNumber(HashTable * table) {
+void printWordsWithNumber(HashTable *table) {
     for (int i = 0; i < TABLE_SIZE; i++) {
         printList(table->table[i]);
     }
 }
 
 double getFillFactor(HashTable *table) {
-    return (double)(table->filled) / (table->size);
+    return (double) (table->filled) / (table->size);
 }
 
 int getMaxListLength(HashTable *table) {
@@ -89,5 +90,5 @@ double getAverageListLength(HashTable *table) {
             count++;
         }
     }
-    return (double )(sumLen) / count;
+    return (double) (sumLen) / count;
 }
