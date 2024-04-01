@@ -1,5 +1,5 @@
-#include "smartQuickSortTest.h"
+#include "smartQuickSortTest.c"
 
 int main() {
-    runAllTestsTask3();
+    return runAllTestsTask3();
 }

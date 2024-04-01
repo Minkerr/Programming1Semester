@@ -1,4 +1,4 @@
 #pragma once
 
-void runAllTestsTask3();
+int runAllTestsTask3();
 

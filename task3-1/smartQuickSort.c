@@ -8,45 +8,38 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
+int partition(int array[], int low, int high) {
+    int pivot = array[high];
     int i = low - 1;
     for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
+        if (array[j] < pivot) {
             i++;
-            swap(&arr[i], &arr[j]);
+            swap(&array[i], &array[j]);
         }
     }
-    swap(&arr[i + 1], &arr[high]);
+    swap(&array[i + 1], &array[high]);
     return i + 1;
 }
 
-void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int bound = partition(arr, low, high);
-        quickSort(arr, low, bound - 1);
-        quickSort(arr, bound + 1, high);
-    }
-}
-
-void insertSort(int arr[], int n) {
-    for (int i = 1; i < n; i++) {
-        int temp = arr[i];
+void insertSort(int array[], int low, int high) {
+    for (int i = low + 1; i < high; i++) {
+        int temp = array[i];
         int j = i - 1;
-        while (j >= 0 && arr[j] > temp) {
-            arr[j + 1] = arr[j];
+        while (j >= low && array[j] > temp) {
+            array[j + 1] = array[j];
             j--;
         }
-        arr[j + 1] = temp;
+        array[j + 1] = temp;
     }
 }
 
-void smartQsort(int arr[], int low, int high) {
-    if (low < high) {
-        if (high - low + 1 <= THRESHOLD) {
-            insertSort(arr + low, high - low + 1);
-        } else {
-            quickSort(arr, low, high);
-        }
+void smartQsort(int array[], int low, int high) {
+    if (high - low + 1 <= THRESHOLD){
+        insertSort(array, low, high);
+    }
+    else {
+        int bound = partition(array, low, high);
+        smartQsort(array, low, bound - 1);
+        smartQsort(array, bound + 1, high);
     }
 }
