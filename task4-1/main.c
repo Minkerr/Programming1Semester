@@ -1,5 +1,8 @@
 #include "binaryAdditionTest.h"
 
 int main() {
-    return runAllTestsTask4();
+    if (!runAllTestsTask4()) {
+        return -1;
+    }
+    return 0;
 }
