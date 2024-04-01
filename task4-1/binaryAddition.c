@@ -18,11 +18,10 @@ void decimalToBinary(int num, int *convertedNum) {
 int binaryToDecimal(int *num) {
     int sum = 0;
     int current = 1;
-    for (int i = INT_SIZE - 1; i > 0; i--) {
+    for (int i = INT_SIZE - 1; i >= 0; i--) {
         sum += num[i] * current;
         current <<= 1;
     }
-    sum -= num[0] * current;
     return sum;
 }
 
