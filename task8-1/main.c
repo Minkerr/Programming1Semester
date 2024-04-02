@@ -1,5 +1,30 @@
 #include "AVLTree.c"
 
+#define CAPACITY 256
+
+char *readStringFromConsole() {
+    char *line = calloc(CAPACITY, sizeof(char));
+    if (line == NULL) {
+        return NULL;
+    }
+    char c = '0';
+    int index = 0;
+    int lineSize = CAPACITY;
+    while ((c = getchar()) != '\n') {
+        if (lineSize == CAPACITY) {
+            char *newLine = realloc(line, (lineSize + CAPACITY) * sizeof(char));
+            if (newLine == NULL) {
+                return NULL;
+            } else {
+                line = newLine;
+                lineSize = lineSize + CAPACITY;
+            }
+        }
+        line[index++] = c;
+    }
+    return line;
+}
+
 void printMenu() {
     printf("\nMenu:\n");
     printf("1. Insert\n");
@@ -10,34 +35,35 @@ void printMenu() {
 }
 
 int main() {
-    Tree* tree = initTree();
-    int command;
-    char key[CAPACITY];
-    char val[CAPACITY];
-    
+    int command = 0;
+    char* key = {0};
+    char* val = {0};
     do {
         printMenu();
-        printf("Enter the command number (1-5):");
-        scanf("%d", &command);
+        printf("Enter the command number (1-5): \n");
+        char* readResult = readStringFromConsole();
+        command = (readResult[0] - '0');
 
-        switch(command) {
+        switch (command) {
             case 1:
-                printf("Enter the key: ");
-                scanf("%s", &key);
-                printf("Enter the value: ");
-                scanf("%s", &val);
-                tree->root = insert(tree->root, key, val);
+                printf("Enter the key: \n");
+                key = readStringFromConsole();
+                printf("Enter the value: \n");
+                val = readStringFromConsole();
+                bool shouldClimbUp = true;
+                tree->root = insert(tree->root, key, val, &shouldClimbUp);
                 break;
             case 2:
-                printf("Enter the key: ");
-                scanf("%s", &key);
-                tree->root = deleteNode(tree->root, key);
+                printf("Enter the key: \n");
+                key = readStringFromConsole();
+                shouldClimbUp = true;
+                tree->root = deleteNode(tree->root, key, &shouldClimbUp);
                 break;
             case 3:
-                printf("Enter the key: ");
-                scanf("%s", &key);
-                char* foundValue = findValueByKey(tree->root, key);
-                if(foundValue != NULL) {
+                printf("Enter the key: \n");
+                key = readStringFromConsole();
+                char *foundValue = findValueByKey(tree->root, key);
+                if (foundValue != NULL) {
                     printf("%s\n", foundValue);
                 } else {
                     printf("There is no such key.\n");
@@ -47,7 +73,7 @@ int main() {
                 printTree(tree->root);
                 break;
             case 5:
-                deleteTree(tree);
+                deleteTree(&tree);
                 break;
             default:
                 printf("Incorrect input\n");

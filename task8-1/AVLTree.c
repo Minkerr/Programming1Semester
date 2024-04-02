@@ -4,8 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define CAPACITY 256
-
 typedef struct Node {
     char *key;
     char *value;
@@ -19,18 +17,14 @@ typedef struct Tree {
 } Tree;
 
 Tree *initTree() {
-    Tree *tree = malloc(sizeof(Tree));
-    tree->root = NULL;
+    Tree *tree = calloc(1, sizeof(Tree));
     return tree;
 }
 
 Node *createNode(char *key, char *value) {
-    Node *newNode = malloc(sizeof(Node));
-    newNode->key = malloc(CAPACITY * sizeof(char));
-    newNode->value = malloc(CAPACITY * sizeof(char));
-    newNode->left = NULL;
-    newNode->right = NULL;
-    newNode->balance = 0;
+    Node *newNode = calloc(1, sizeof(Node));
+    newNode->key = strdup(key);
+    newNode->value = strdup(value);
     strcpy(newNode->key, key);
     strcpy(newNode->value, value);
     return newNode;
@@ -41,7 +35,7 @@ Node *rotateLeft(Node *node) {
     Node *leftRightNode = rightNode->left;
     rightNode->left = node;
     node->right = leftRightNode;
-    
+
     if (rightNode->balance != 0) {
         node->balance = 0;
         rightNode->balance = 0;
@@ -68,7 +62,7 @@ Node *rotateRight(Node *node) {
     return leftNode;
 }
 
-Node* bigRotateLeft(Node* node) {
+Node *bigRotateLeft(Node *node) {
     Node *rightNode = node->right;
     Node *leftRightNode = rightNode->left;
     Node *leftLeftRightNode = leftRightNode->left;
@@ -99,7 +93,7 @@ Node* bigRotateLeft(Node* node) {
     return leftRightNode;
 }
 
-Node* bigRotateRight(Node* node) {
+Node *bigRotateRight(Node *node) {
     Node *leftNode = node->left;
     Node *rightLeftNode = leftNode->right;
     Node *rightRightLeftNode = rightLeftNode->right;
@@ -130,8 +124,8 @@ Node* bigRotateRight(Node* node) {
     return rightLeftNode;
 }
 
-Node* balance(Node *node) {
-    if(node == NULL){
+Node *balance(Node *node) {
+    if (node == NULL) {
         return node;
     }
     if (node->balance == 2) {
@@ -141,7 +135,7 @@ Node* balance(Node *node) {
         return bigRotateLeft(node);
     }
     if (node->balance == -2) {
-        if (node->left->balance <= 0){
+        if (node->left->balance <= 0) {
             return rotateRight(node);
         }
         return bigRotateRight(node);
@@ -156,80 +150,72 @@ Node *findMin(Node *root) {
     return root;
 }
 
-int getTreeHeight(Node* root){
-    if(root == NULL) {
-        return 0;
-    }
-    int leftHeight = getTreeHeight(root->left);
-    int rightHeight = getTreeHeight(root->right);
-    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
-}
-
-void recalculateBalance(Node* root){
-    if(root == NULL) {
-        return;
-    }
-    int leftHeight = getTreeHeight(root->left);
-    int rightHeight = getTreeHeight(root->right);
-    root->balance = rightHeight - leftHeight;
-    recalculateBalance(root->left);
-    recalculateBalance(root->right);
-}
-
-Node* insert(Node *node, char *key, char *value) {
+Node *insert(Node *node, char *key, char *value, bool *shouldClimbUp) {
     if (node == NULL) {
         Node *newNode = createNode(key, value);
         return newNode;
     }
 
-    int comp = strcmp(key, node->key);
-    if (comp < 0) {
-        node->left = insert(node->left, key, value);
+    int comparisonResult = strcmp(key, node->key);
+    if (comparisonResult < 0) {
+        node->left = insert(node->left, key, value, shouldClimbUp);
         node->balance--;
-    } else if (comp > 0) {
-        node->right = insert(node->right, key, value);
+    } else if (comparisonResult > 0) {
+        node->right = insert(node->right, key, value, shouldClimbUp);
         node->balance++;
     } else {
+        *shouldClimbUp = false;
         node->value = strdup(value);
         return node;
     }
-    recalculateBalance(node);
+    if (!*shouldClimbUp) {
+        node->balance = comparisonResult < 0 ? (node->balance + 1) : (node->balance - 1);
+        return node;
+    }
+    if (node->balance == 2 || node->balance == -2 || node->balance == 0) {
+        *shouldClimbUp = false;
+    }
     return balance(node);
 }
 
-Node *deleteNode(Node *root, char *key) {
-    if (root == NULL) {
+Node *deleteNode(Node *node, char *key, bool *shouldClimbUp) {
+    if (node == NULL) {
+        *shouldClimbUp = false;
         return NULL;
     }
-
-    int comp = strcmp(key, root->key);
-    if (comp < 0) {
-        root->left = deleteNode(root->left, key);
-    } else if (comp > 0) {
-        root->right = deleteNode(root->right, key);
+    int comparisonResult = strcmp(key, node->key);
+    int balanceDifference = 0;
+    if (comparisonResult < 0) {
+        node->left = deleteNode(node->left, key, shouldClimbUp);
+        balanceDifference++;
+    } else if (comparisonResult > 0) {
+        node->right = deleteNode(node->right, key, shouldClimbUp);
+        balanceDifference--;
     } else {
-        if (root->left == NULL || root->right == NULL) {
-            Node *tmp = root->left != NULL ? root->left : root->right;
-            if (tmp == NULL) {
-                tmp = root;
-                root = NULL;
-                free(tmp->key);
-                free(tmp->value);
-                free(tmp);
-            } else {
-                root = tmp;
-            }
+        if (node->left == NULL || node->right == NULL) {
+            *shouldClimbUp = true;
+            Node *tmp = node;
+            node = node->left != NULL ? node->left : node->right;
+            free(tmp->key);
+            free(tmp->value);
+            free(tmp);
         } else {
-            Node *tmp = findMin(root->right);
-            free(root->key);
-            free(root->value);
-            root->key = strdup(tmp->key);
-            root->value = strdup(tmp->value);
-            root->right = deleteNode(root->right, tmp->key);
+            Node *tmp = findMin(node->right);
+            free(node->key);
+            free(node->value);
+            node->key = strdup(tmp->key);
+            node->value = strdup(tmp->value);
+            node->right = deleteNode(node->right, tmp->key, shouldClimbUp);
         }
     }
-    recalculateBalance(root);
-    return balance(root);
+    if (!*shouldClimbUp || node == NULL) {
+        return node;
+    }
+    node->balance += balanceDifference;
+    if (node->balance == 1 || node->balance == -1) {
+        *shouldClimbUp = false;
+    }
+    return balance(node);
 }
 
 void printTree(Node *root) {
@@ -245,30 +231,30 @@ char *findValueByKey(Node *node, char *key) {
     if (node == NULL) {
         return NULL;
     }
-    int comp = strcmp(key, node->key);
-    if (comp < 0) {
+    int comparisonResult = strcmp(key, node->key);
+    if (comparisonResult < 0) {
         return findValueByKey(node->left, key);
-    }
-    else if (comp > 0) {
+    } else if (comparisonResult > 0) {
         return findValueByKey(node->right, key);
-    }
-    else {
+    } else {
         return node->value;
     }
 }
 
-void deleteTreeRecursion(Node *node) {
-    if (node == NULL) {
+void deleteTreeRecursion(Node **node) {
+    if (*node == NULL) {
         return;
     }
-    deleteTreeRecursion(node->left);
-    deleteTreeRecursion(node->right);
-    free(node->value);
-    free(node->key);
-    free(node);
+    deleteTreeRecursion(&((*node)->left));
+    deleteTreeRecursion(&((*node)->right));
+    free((*node)->value);
+    free((*node)->key);
+    free(*node);
+    node = NULL;
 }
 
-void deleteTree(Tree* tree) {
-    deleteTreeRecursion(tree->root);
-    free(tree);
+void deleteTree(Tree **tree) {
+    deleteTreeRecursion(&((*tree)->root));
+    free(*tree);
+    tree = NULL;
 }
