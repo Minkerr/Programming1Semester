@@ -1,10 +1,10 @@
 #include "graph.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #define GRAPH_SIZE 16
-#define INF 1000000
+#define INCORRECT_INPUT (-1)
+#define GRAPH_IS_NULL (-2)
 
 typedef struct Graph {
     int edges[GRAPH_SIZE][GRAPH_SIZE];
@@ -23,30 +23,38 @@ Graph *initGraph(int num) {
             if (i == j) {
                 graph->shortestDistance[i][j] = 0;
             } else {
-                graph->shortestDistance[i][j] = INF;
+                graph->shortestDistance[i][j] = INT_MAX;
             }
         }
     }
     return graph;
 }
 
-void addEdge(Graph *graph, int from, int to, int length) {
+int addEdge(Graph *graph, int from, int to, int length) {
+    if (graph == NULL) {
+        return GRAPH_IS_NULL;
+    }
     if (from <= graph->vertexNum && to <= graph->vertexNum) {
         from--;
         to--;
         graph->edges[from][to] = length;
         graph->edges[to][from] = length;
+        return 0;
+    } else {
+        return INCORRECT_INPUT;
     }
 }
 
-void deleteGraph(Graph *graph) {
-    free(graph);
+void deleteGraph(Graph **graph) {
+    free(*graph);
+    graph = NULL;
 }
 
-int minDistanceVertex(int dist[], int visited[], int size) {
-    int min = INF, minIndex;
+int minDistanceVertex(const int dist[], const bool visited[], int size) {
+    int min = INT_MAX;
+    int minIndex = 0;
     for (int v = 0; v < size; v++) {
-        if (visited[v] == 0 && dist[v] <= min) {
+        if (!visited[v] && dist[v] <= min) {
             min = dist[v];
             minIndex = v;
         }
@@ -56,20 +64,19 @@ int minDistanceVertex(int dist[], int visited[], int size) {
 
 void dijkstra(Graph *graph, int startVertex) {
     int size = graph->vertexNum;
-    int dist[size];
-    int visited[size];
+    int dist[GRAPH_SIZE] = {0};
+    bool visited[GRAPH_SIZE] = {false};
     for (int i = 0; i < size; i++) {
-        dist[i] = INF;
-        visited[i] = 0;
+        dist[i] = INT_MAX;
     }
     dist[startVertex] = 0;
 
     for (int count = 0; count < size - 1; count++) {
         int u = minDistanceVertex(dist, visited, size);
-        visited[u] = 1;
+        visited[u] = true;
 
         for (int v = 0; v < size; v++) {
-            if (!visited[v] && graph->edges[u][v] && dist[u] != INF && dist[u] + graph->edges[u][v] < dist[v]) {
+            if (!visited[v] && graph->edges[u][v] && dist[u] != INT_MAX && dist[u] + graph->edges[u][v] < dist[v]) {
                 dist[v] = dist[u] + graph->edges[u][v];
             }
         }
@@ -100,21 +107,27 @@ void markCity(Graph *graph, int city, int num) {
 
 Graph *readInputFromFile(char *fileName) {
     FILE *file = fopen(fileName, "r");
-    int n;
-    int m;
+    if (file == NULL) {
+        return NULL;
+    }
+    int n = 0;
+    int m = 0;
     fscanf_s(file, "%d %d", &n, &m);
     Graph *graph = initGraph(n);
     for (int i = 0; i < m; i++) {
-        int from;
-        int to;
-        int len;
+        int from = 0;
+        int to = 0;
+        int len = 0;
         fscanf_s(file, "%d %d %d", &from, &to, &len);
-        addEdge(graph, from, to, len);
+        int addingResult = addEdge(graph, from, to, len);
+        if (addingResult != 0) {
+            return NULL;
+        }
     }
-    int k;
+    int k = 0;
     fscanf_s(file, "%d", &k);
     for (int i = 0; i < k; i++) {
-        int city;
+        int city = 0;
         fscanf_s(file, "%d", &city);
         markCity(graph, city, i + 1);
     }
@@ -122,16 +135,33 @@ Graph *readInputFromFile(char *fileName) {
     return graph;
 }
 
-void markTheNearestNotMarkedVertex(Graph *graph, int capital) {
-    int minIndex = 0;
-    int minDist = INF;
+void dfs(Graph *graph, int capital, bool *visited) {
+    visited[capital] = true;
     for (int i = 0; i < graph->vertexNum; i++) {
-        if (graph->governmentMarks[i] == 0 && graph->shortestDistance[capital][i] < minDist) {
+        if (graph->edges[capital][i] && !visited[i]
+            && (graph->governmentMarks[i] == graph->governmentMarks[capital] || graph->governmentMarks[i] == 0)) {
+            dfs(graph, i, visited);
+        }
+    }
+}
+
+bool markTheNearestAvailableVertex(Graph *graph, int capital) {
+    int minIndex = -1;
+    int minDist = INT_MAX;
+    bool visited[GRAPH_SIZE] = {false};
+    dfs(graph, capital, visited);
+    for (int i = 0; i < graph->vertexNum; i++) {
+        if (graph->governmentMarks[i] == 0 && graph->shortestDistance[capital][i] < minDist && visited[i]) {
             minDist = graph->shortestDistance[capital][i];
             minIndex = i;
         }
     }
-    graph->governmentMarks[minIndex] = graph->governmentMarks[capital]; //mark the found the nearest city with a number of capital
+    if (minIndex != -1) {
+        graph->governmentMarks[minIndex] = graph->governmentMarks[capital];
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void distributeCities(Graph *graph) {
@@ -144,10 +174,14 @@ void distributeCities(Graph *graph) {
             numberOfCapitals++;
         }
     }
-    int counter = 0;
-    for (int i = 0; i < graph->vertexNum - numberOfCapitals; i++) {
-        markTheNearestNotMarkedVertex(graph, listOfCapitals[counter]);
-        counter = (counter + 1) % numberOfCapitals;
+    int turnCounter = 0;
+    int notMarkedVertexesLeft = graph->vertexNum - numberOfCapitals;
+    while (notMarkedVertexesLeft > 0) {
+        bool wasVertexMarked = markTheNearestAvailableVertex(graph, listOfCapitals[turnCounter]);
+        turnCounter = (turnCounter + 1) % numberOfCapitals;
+        if (wasVertexMarked) {
+            notMarkedVertexesLeft--;
+        }
     }
 }
 

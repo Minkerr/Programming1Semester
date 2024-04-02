@@ -2,7 +2,9 @@
 
 
 int main() {
-    runTestForInputData();
+    if (!runAllTestsForTask10()) {
+        return -1;
+    }
 
     return 0;
 }

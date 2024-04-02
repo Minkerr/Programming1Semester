@@ -1,3 +1,6 @@
 #pragma once
 
-void runTestForInputData();
+#include <stdbool.h>
+
+// run all tests for graph task
+bool runAllTestsForTask10();
