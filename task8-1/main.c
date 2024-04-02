@@ -1,4 +1,5 @@
-#include "AVLTree.c"
+#include "AVLTree.h"
+#include "AVLTreeTest.c"
 
 #define CAPACITY 256
 
@@ -35,13 +36,18 @@ void printMenu() {
 }
 
 int main() {
+    Tree *tree = initTree();
+    bool shouldClimbUp = true;
+    if (!runAllTestsForTask8()) {
+        return -1;
+    }
     int command = 0;
-    char* key = {0};
-    char* val = {0};
+    char *key = {0};
+    char *val = {0};
     do {
         printMenu();
         printf("Enter the command number (1-5): \n");
-        char* readResult = readStringFromConsole();
+        char *readResult = readStringFromConsole();
         command = (readResult[0] - '0');
 
         switch (command) {
@@ -80,4 +86,5 @@ int main() {
         }
     } while (command != 5);
 
+    return 0;
 }

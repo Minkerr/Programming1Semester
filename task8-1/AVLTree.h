@@ -4,6 +4,7 @@
 
 // AVT-Tree dictionary
 typedef struct Tree Tree;
+
 // One node of the tree. It contains key and value
 typedef struct Node Node;
 
