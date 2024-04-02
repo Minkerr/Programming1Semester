@@ -18,11 +18,18 @@ typedef struct Tree {
 
 Tree *initTree() {
     Tree *tree = calloc(1, sizeof(Tree));
+    if (tree == NULL) {
+        printf("Memory allocation error");
+    }
     return tree;
 }
 
 Node *createNode(char *key, char *value) {
     Node *newNode = calloc(1, sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation error");
+        return NULL;
+    }
     newNode->key = strdup(key);
     newNode->value = strdup(value);
     strcpy(newNode->key, key);
