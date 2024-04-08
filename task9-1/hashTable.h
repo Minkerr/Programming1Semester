@@ -7,10 +7,10 @@ typedef struct HashTable HashTable;
 HashTable *initTable();
 
 // add new word to hash table
-int addToTable(HashTable *table, char *word);
+int addToTable(HashTable *table, const char const *word);
 
 // delete table and free memory
-void deleteTable(HashTable *table);
+void deleteTable(HashTable **table);
 
 // read words from file and put them to table
 HashTable *readFileToTable(char *fileName);
@@ -21,7 +21,7 @@ void printTable(HashTable *table);
 // print all words in hash table with their number of appearances
 void printWordsWithNumber(HashTable *table);
 
-//
+// get fill factor of the table
 double getFillFactor(HashTable *table);
 
 // get max length of list in cell of table

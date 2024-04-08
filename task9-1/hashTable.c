@@ -1,4 +1,4 @@
-#include "list.c"
+#include "list.h"
 
 #define TABLE_SIZE 11
 
@@ -13,8 +13,20 @@ HashTable *initTable() {
     if (table == NULL) {
         return NULL;
     }
+    int lastNotInitializedTable = 0;
     for (int i = 0; i < TABLE_SIZE; ++i) {
         table->table[i] = initList();
+        if (table->table[i] == NULL) {
+            lastNotInitializedTable = i;
+            break;
+        }
+    }
+    if (lastNotInitializedTable != 0) {
+        for (int i = 0; i < lastNotInitializedTable; ++i) {
+            deleteList(table->table[i]);
+        }
+        free(table);
+        return NULL;
     }
     table->countData = 0;
     table->size = TABLE_SIZE;
@@ -29,18 +41,18 @@ int hash(const char *key) {
     return result;
 }
 
-int addToTable(HashTable *table, char *word) {
+int addToTable(HashTable *table, const char * const word) {
     List *elementOfTable = table->table[hash(word)];
     table->countData++;
     return add(elementOfTable, word);
 }
 
-void deleteTable(HashTable *table) {
-    for (int i = 0; i < table->size; i++) {
-        deleteList(table->table[i]);
+void deleteTable(HashTable **table) {
+    for (int i = 0; i < (*table)->size; i++) {
+        deleteList((*table)->table[i]);
     }
-    free(table);
-    table = NULL;
+    free(*table);
+    *table = NULL;
 }
 
 HashTable *readFileToTable(char *fileName) {
@@ -51,6 +63,7 @@ HashTable *readFileToTable(char *fileName) {
     }
     char word[CAPACITY] = {0};
     while (fscanf_s(file, "%s ", word, CAPACITY) != EOF) {
+
         addToTable(table, word);
     }
     fclose(file);
@@ -78,8 +91,8 @@ double getFillFactor(HashTable *table) {
 int getMaxListLength(HashTable *table) {
     int maxLength = 0;
     for (int i = 0; i < table->size; i++) {
-        if (listLen(table->table[i]) > maxLength) {
-            maxLength = listLen(table->table[i]);
+        if (listLength(table->table[i]) > maxLength) {
+            maxLength = listLength(table->table[i]);
         }
     }
     return maxLength;
@@ -89,8 +102,8 @@ double getAverageListLength(HashTable *table) {
     int count = 0;
     int sumLen = 0;
     for (int i = 0; i < table->size; i++) {
-        if (listLen(table->table[i]) != 0) {
-            sumLen += listLen(table->table[i]);
+        if (listLength(table->table[i]) != 0) {
+            sumLen += listLength(table->table[i]);
             count++;
         }
     }

@@ -21,10 +21,7 @@ typedef struct List {
 } List;
 
 List *initList() {
-    List *list = malloc(sizeof(List));
-    list->head = list->tail = NULL;
-    list->length = 0;
-    return list;
+    return calloc(1, sizeof(List));
 }
 
 bool isEmpty(List *list) {
@@ -44,18 +41,21 @@ Node *searchNode(List *list, char *targetWord) {
 
 int add(List *list, char *word) {
     list->count++;
+    Node *current = searchNode(list, word);
     if (searchNode(list, word) != NULL) {
-        Node *current = searchNode(list, word);
         current->count++;
         return 0;
     }
-    Node *newNode = malloc(sizeof(Node));
+    Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
+        free(newNode);
         return MEMORY_ALLOCATION_ERROR;
     }
     list->length++;
-    newNode->word = malloc(CAPACITY * sizeof(char));
+    newNode->word = calloc(CAPACITY, sizeof(char));
     if (newNode->word == NULL) {
+        free(newNode->word);
+        free(newNode);
         return MEMORY_ALLOCATION_ERROR;
     }
     newNode->count = 1;
@@ -68,6 +68,7 @@ int add(List *list, char *word) {
         list->tail->next = newNode;
         list->tail = newNode;
     }
+    return 0;
 }
 
 void deleteHead(List *list) {
@@ -85,9 +86,10 @@ void deleteList(List *list) {
         deleteHead(list);
     }
     free(list);
+    list = NULL;
 }
 
-int listLen(List *list) {
+int listLength(List *list) {
     return list->length;
 }
 

@@ -1,5 +1,5 @@
 #include "hashTable.h"
-#include "hashTableTest.c"
+#include "hashTableTest.h"
 
 int main() {
     if (!runAllTestsForTask9()) {
@@ -8,6 +8,6 @@ int main() {
     HashTable *table = readFileToTable("task9-1/input.txt");
     printTable(table);
     printWordsWithNumber(table);
-    deleteTable(table);
+    deleteTable(&table);
     return 0;
 }
