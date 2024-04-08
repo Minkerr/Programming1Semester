@@ -1,6 +1,6 @@
 #pragma once
 
-enum ErrorCode {
+enum errorCode {
     MemoryAllocationError = -1,
     Ok = 0
 };

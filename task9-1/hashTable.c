@@ -1,5 +1,5 @@
 #include "list.h"
-#include "ErrorCode.h"
+#include "errorCode.h"
 #include <stdio.h>
 #include <stdlib.h>
 
