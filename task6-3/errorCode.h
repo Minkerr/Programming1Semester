@@ -1,4 +1,4 @@
 enum errorCode {
-    MemoryAllocationError = -1,
-    Ok = 0
+    MEMORY_ALLOCATION_ERROR = -1,
+    OK = 0
 };

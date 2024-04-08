@@ -30,19 +30,19 @@ bool isEmpty(List *list) {
 int add(List *list, char *name, char *phone) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
-        return MemoryAllocationError;
+        return MEMORY_ALLOCATION_ERROR;
     }
     list->length++;
     newNode->name = calloc(strlen(name), sizeof(char));
     if (newNode->name == NULL) {
         free(newNode);
-        return MemoryAllocationError;
+        return MEMORY_ALLOCATION_ERROR;
     }
     newNode->phone = calloc(strlen(phone), sizeof(char));
     if (newNode->phone == NULL) {
         free(newNode->name);
         free(newNode);
-        return MemoryAllocationError;
+        return MEMORY_ALLOCATION_ERROR;
     }
     strcpy(newNode->name, name);
     strcpy(newNode->phone, phone);
