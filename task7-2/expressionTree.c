@@ -19,21 +19,21 @@ typedef struct Tree {
 } Tree;
 
 Tree *initTree() {
-    Tree *tree = malloc(sizeof(Tree));
-    return tree;
+    return calloc(1, sizeof(Tree));
 }
 
 bool isNodeANumber(Node *node) {
     return node->left == NULL && node->right == NULL;
 }
 
-char *readStringFromFile(char *fileName) {
+char *readStringFromFile(const char * const fileName) {
     FILE *file = fopen(fileName, "r");
     if (file == NULL) {
         return NULL;
     }
     char *line = calloc(CAPACITY, sizeof(char));
     if (line == NULL) {
+        fclose(file);
         return NULL;
     }
     char c = '0';
@@ -43,6 +43,8 @@ char *readStringFromFile(char *fileName) {
         if (lineSize == CAPACITY) {
             char *newLine = realloc(line, (lineSize + CAPACITY) * sizeof(char));
             if (newLine == NULL) {
+                free(line);
+                fclose(file);
                 return NULL;
             } else {
                 line = newLine;
@@ -66,13 +68,10 @@ int parseNumberFromString(char *str, int *i) {
 
 bool isOperation(char *str, int i) {
     return str[i] == '+' || str[i] == '/' || str[i] == '*' || str[i] == '-' &&
-                                                              ((str[i + 1] <= '0') || (str[i + 1] >= '9'));
+        ((str[i + 1] <= '0') || (str[i + 1] >= '9'));
 }
 
 Node *parseTreeFromStringRec(char *str, int *i, int *errorCode) {
-    if (str == NULL) {
-        return NULL;
-    }
     int strLength = strlen(str) - 1;
     while ((*i) != strLength && (str[(*i)] == '(' || str[(*i)] == ')' || str[(*i)] == ' ')) {
         (*i)++;
@@ -80,7 +79,7 @@ Node *parseTreeFromStringRec(char *str, int *i, int *errorCode) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
         (*errorCode) = MEMORY_ALLOCATION_ERROR;
-        return newNode;
+        return NULL;
     }
     if (isOperation(str, (*i))) {
         newNode->operation = str[(*i)++];
@@ -93,9 +92,15 @@ Node *parseTreeFromStringRec(char *str, int *i, int *errorCode) {
 }
 
 Tree *parseTreeFromString(char *str) {
+    if (str == NULL) {
+        return NULL;
+    }
     int i = 0;
     int errorCode = 0;
     Tree *tree = initTree();
+    if (tree == NULL) {
+        return NULL;
+    }
     tree->root = parseTreeFromStringRec(str, &i, &errorCode);
     if (errorCode != 0) {
         return NULL;
@@ -161,7 +166,8 @@ void deleteTreeRecursive(Node *node) {
     free(node);
 }
 
-void deleteTree(Tree *tree) {
-    deleteTreeRecursive(tree->root);
-    free(tree);
+void deleteTree(Tree **tree) {
+    deleteTreeRecursive((*tree)->root);
+    free(*tree);
+    *tree = NULL;
 }

@@ -8,6 +8,6 @@ int main() {
     }
     Tree *tree = parseTreeFromString(readStringFromFile("task7-2/input.txt"));
     printTree(tree);
-    deleteTree(tree);
+    deleteTree(&tree);
     return 0;
 }

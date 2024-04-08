@@ -1,9 +1,10 @@
 #pragma once
+
 // a binary tree that implements an expression tree that can calculate an expression
 typedef struct Tree Tree;
 
 // read string from file
-char *readStringFromFile(char *fileName);
+char *readStringFromFile(const char * const fileName);
 
 // create a tree based on an expression in string
 Tree *parseTreeFromString(char *str);
@@ -15,4 +16,4 @@ void printTree(Tree *tree);
 int calculate(Tree *tree);
 
 // delete tree and free memory
-void deleteTree(Tree *tree);
+void deleteTree(Tree **tree);
