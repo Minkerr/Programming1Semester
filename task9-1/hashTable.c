@@ -67,7 +67,7 @@ HashTable *readFileToTable(char *fileName) {
     char word[CAPACITY] = {0};
     while (fscanf_s(file, "%s ", word, CAPACITY) != EOF) {
         int addingResult = addToTable(table, word);
-        if (addingResult != Ok) {
+        if (addingResult != OK) {
             deleteTable(&table);
             fclose(file);
             return NULL;

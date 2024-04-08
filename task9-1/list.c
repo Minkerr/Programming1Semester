@@ -49,14 +49,14 @@ int add(List *list, char *word) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
         free(newNode);
-        return MemoryAllocationError;
+        return MEMORY_ALLOCATION_ERROR;
     }
     list->length++;
     newNode->word = calloc(CAPACITY, sizeof(char));
     if (newNode->word == NULL) {
         free(newNode->word);
         free(newNode);
-        return MemoryAllocationError;
+        return MEMORY_ALLOCATION_ERROR;
     }
     newNode->count = 1;
     newNode->next = NULL;
