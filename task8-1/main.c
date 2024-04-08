@@ -1,5 +1,7 @@
 #include "AVLTree.h"
-#include "AVLTreeTest.c"
+#include "AVLTreeTest.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define CAPACITY 256
 
@@ -57,18 +59,18 @@ int main() {
                 printf("Enter the value: \n");
                 val = readStringFromConsole();
                 bool shouldClimbUp = true;
-                tree->root = insert(tree->root, key, val, &shouldClimbUp);
+                tree = insert(tree, key, val, &shouldClimbUp);
                 break;
             case 2:
                 printf("Enter the key: \n");
                 key = readStringFromConsole();
                 shouldClimbUp = true;
-                tree->root = deleteNode(tree->root, key, &shouldClimbUp);
+                tree = deleteNode(tree, key, &shouldClimbUp);
                 break;
             case 3:
                 printf("Enter the key: \n");
                 key = readStringFromConsole();
-                char *foundValue = findValueByKey(tree->root, key);
+                char *foundValue = findValueByKey(tree, key);
                 if (foundValue != NULL) {
                     printf("%s\n", foundValue);
                 } else {
@@ -76,7 +78,7 @@ int main() {
                 }
                 break;
             case 4:
-                printTree(tree->root);
+                printTree(tree);
                 break;
             case 5:
                 deleteTree(&tree);

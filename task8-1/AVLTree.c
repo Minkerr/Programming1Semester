@@ -17,11 +17,7 @@ typedef struct Tree {
 } Tree;
 
 Tree *initTree() {
-    Tree *tree = calloc(1, sizeof(Tree));
-    if (tree == NULL) {
-        printf("Memory allocation error");
-    }
-    return tree;
+    return calloc(1, sizeof(Tree));
 }
 
 Node *createNode(char *key, char *value) {
@@ -157,22 +153,24 @@ Node *findMin(Node *root) {
     return root;
 }
 
-Node *insert(Node *node, char *key, char *value, bool *shouldClimbUp) {
+Node *insertRecursive(Node *node, char *key, char *value, bool *shouldClimbUp) {
     if (node == NULL) {
-        Node *newNode = createNode(key, value);
-        return newNode;
+        return createNode(key, value);
     }
 
     int comparisonResult = strcmp(key, node->key);
     if (comparisonResult < 0) {
-        node->left = insert(node->left, key, value, shouldClimbUp);
+        node->left = insertRecursive(node->left, key, value, shouldClimbUp);
         node->balance--;
     } else if (comparisonResult > 0) {
-        node->right = insert(node->right, key, value, shouldClimbUp);
+        node->right = insertRecursive(node->right, key, value, shouldClimbUp);
         node->balance++;
     } else {
         *shouldClimbUp = false;
-        node->value = strdup(value);
+        char *temp = strdup(value);
+        if (temp != NULL) {
+            node->value = temp;
+        }
         return node;
     }
     if (!*shouldClimbUp) {
@@ -185,7 +183,15 @@ Node *insert(Node *node, char *key, char *value, bool *shouldClimbUp) {
     return balance(node);
 }
 
-Node *deleteNode(Node *node, char *key, bool *shouldClimbUp) {
+Tree *insert(Tree *tree, char *key, char *value, bool *shouldClimbUp) {
+    Node *temp = insertRecursive(tree->root, key, value, shouldClimbUp);
+    if (temp != NULL) {
+        tree->root = temp;
+    }
+    return tree;
+}
+
+Node *deleteNodeRecursive(Node *node, char *key, bool *shouldClimbUp) {
     if (node == NULL) {
         *shouldClimbUp = false;
         return NULL;
@@ -193,10 +199,10 @@ Node *deleteNode(Node *node, char *key, bool *shouldClimbUp) {
     int comparisonResult = strcmp(key, node->key);
     int balanceDifference = 0;
     if (comparisonResult < 0) {
-        node->left = deleteNode(node->left, key, shouldClimbUp);
+        node->left = deleteNodeRecursive(node->left, key, shouldClimbUp);
         balanceDifference++;
     } else if (comparisonResult > 0) {
-        node->right = deleteNode(node->right, key, shouldClimbUp);
+        node->right = deleteNodeRecursive(node->right, key, shouldClimbUp);
         balanceDifference--;
     } else {
         if (node->left == NULL || node->right == NULL) {
@@ -212,7 +218,7 @@ Node *deleteNode(Node *node, char *key, bool *shouldClimbUp) {
             free(node->value);
             node->key = strdup(tmp->key);
             node->value = strdup(tmp->value);
-            node->right = deleteNode(node->right, tmp->key, shouldClimbUp);
+            node->right = deleteNodeRecursive(node->right, tmp->key, shouldClimbUp);
         }
     }
     if (!*shouldClimbUp || node == NULL) {
@@ -225,27 +231,43 @@ Node *deleteNode(Node *node, char *key, bool *shouldClimbUp) {
     return balance(node);
 }
 
-void printTree(Node *root) {
+Tree *deleteNode(Tree *tree, char *key, bool *shouldClimbUp) {
+    Node *temp = deleteNodeRecursive(tree->root, key, shouldClimbUp);
+    if (temp != NULL) {
+        tree->root = temp;
+    }
+    return tree;
+}
+
+void printTreeRecursive(Node *root) {
     if (root == NULL) {
         return;
     }
-    printTree(root->left);
+    printTreeRecursive(root->left);
     printf("%s: %s\n", root->key, root->value);
-    printTree(root->right);
+    printTreeRecursive(root->right);
 }
 
-char *findValueByKey(Node *node, char *key) {
+void printTree(Tree *tree) {
+    printTreeRecursive(tree->root);
+}
+
+char *findValueByKeyRecursive(Node *node, char *key) {
     if (node == NULL) {
         return NULL;
     }
     int comparisonResult = strcmp(key, node->key);
     if (comparisonResult < 0) {
-        return findValueByKey(node->left, key);
+        return findValueByKeyRecursive(node->left, key);
     } else if (comparisonResult > 0) {
-        return findValueByKey(node->right, key);
+        return findValueByKeyRecursive(node->right, key);
     } else {
         return node->value;
     }
+}
+
+char *findValueByKey(Tree *tree, char *key) {
+    return findValueByKeyRecursive(tree->root, key);
 }
 
 void deleteTreeRecursion(Node **node) {
@@ -257,11 +279,11 @@ void deleteTreeRecursion(Node **node) {
     free((*node)->value);
     free((*node)->key);
     free(*node);
-    node = NULL;
+    *node = NULL;
 }
 
 void deleteTree(Tree **tree) {
     deleteTreeRecursion(&((*tree)->root));
     free(*tree);
-    tree = NULL;
+    *tree = NULL;
 }
