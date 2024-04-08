@@ -1,4 +1,7 @@
 #include "list.h"
+#include "ErrorCode.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define TABLE_SIZE 11
 
@@ -63,8 +66,12 @@ HashTable *readFileToTable(char *fileName) {
     }
     char word[CAPACITY] = {0};
     while (fscanf_s(file, "%s ", word, CAPACITY) != EOF) {
-
-        addToTable(table, word);
+        int addingResult = addToTable(table, word);
+        if (addingResult != Ok) {
+            deleteTable(&table);
+            fclose(file);
+            return NULL;
+        }
     }
     fclose(file);
     return table;

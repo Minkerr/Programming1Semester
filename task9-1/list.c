@@ -1,11 +1,11 @@
 #include "list.h"
+#include "ErrorCode.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 
 #define CAPACITY 256
-#define MEMORY_ALLOCATION_ERROR (-1)
 
 typedef struct Node {
     char *word;
@@ -49,14 +49,14 @@ int add(List *list, char *word) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
         free(newNode);
-        return MEMORY_ALLOCATION_ERROR;
+        return MemoryAllocationError;
     }
     list->length++;
     newNode->word = calloc(CAPACITY, sizeof(char));
     if (newNode->word == NULL) {
         free(newNode->word);
         free(newNode);
-        return MEMORY_ALLOCATION_ERROR;
+        return MemoryAllocationError;
     }
     newNode->count = 1;
     newNode->next = NULL;

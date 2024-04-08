@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 #define CAPACITY 256
 
 // realization of Linked List
