@@ -1,4 +1,5 @@
 #include "list.h"
+#include "errorCode.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,9 +7,20 @@
 
 #define CAPACITY 256
 
+typedef struct Node {
+    char *name;
+    char *phone;
+    struct Node *next;
+} Node;
+
+typedef struct List {
+    int length;
+    Node *head;
+    Node *tail;
+} List;
+
 List *initList() {
-    List *list = calloc(1, sizeof(List));
-    return list;
+    return calloc(1, sizeof(List));
 }
 
 bool isEmpty(List *list) {
@@ -18,13 +30,19 @@ bool isEmpty(List *list) {
 int add(List *list, char *name, char *phone) {
     Node *newNode = calloc(1, sizeof(Node));
     if (newNode == NULL) {
-        return MEMORY_ALLOCATION_ERROR;
+        return MemoryAllocationError;
     }
     list->length++;
     newNode->name = calloc(strlen(name), sizeof(char));
+    if (newNode->name == NULL) {
+        free(newNode);
+        return MemoryAllocationError;
+    }
     newNode->phone = calloc(strlen(phone), sizeof(char));
-    if (newNode->name == NULL || newNode->phone == NULL) {
-        return MEMORY_ALLOCATION_ERROR;
+    if (newNode->phone == NULL) {
+        free(newNode->name);
+        free(newNode);
+        return MemoryAllocationError;
     }
     strcpy(newNode->name, name);
     strcpy(newNode->phone, phone);
@@ -39,22 +57,30 @@ int add(List *list, char *name, char *phone) {
     return 0;
 }
 
-void deleteHead(List *list) {
-    if (!isEmpty(list)) {
-        (list)->length--;
-        Node *tempHead = (list)->head;
-        (list)->head = (list)->head->next;
+void deleteHead(List **list) {
+    if (!isEmpty(*list)) {
+        (*list)->length--;
+        Node *tempHead = (*list)->head;
+        (*list)->head = (*list)->head->next;
+        free(tempHead->phone);
+        free(tempHead->name);
+        free(tempHead);
+    } else {
+        free(*list);
+        *list = NULL;
+    }
+}
+
+void deleteList(List **list) {
+    while (!isEmpty(*list)) {
+        Node *tempHead = (*list)->head;
+        (*list)->head = (*list)->head->next;
         free(tempHead->phone);
         free(tempHead->name);
         free(tempHead);
     }
-}
-
-void deleteList(List *list) {
-    while (!isEmpty(list)) {
-        deleteHead(list);
-    }
-    free(list);
+    free(*list);
+    *list = NULL;
 }
 
 int listLength(List *list) {
@@ -63,12 +89,18 @@ int listLength(List *list) {
 
 void moveHeadToNewList(List *newList, List *oldList) {
     add(newList, oldList->head->name, oldList->head->phone);
-    deleteHead(oldList);
+    deleteHead(&oldList);
 }
 
 List *readFromFile(const char *fileName) {
     List *list = initList();
+    if (list == NULL) {
+        return NULL;
+    }
     FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        return NULL;
+    }
     char c = '0';
     char *line = calloc(CAPACITY, sizeof(char));
     int lineSize = CAPACITY;
@@ -89,19 +121,36 @@ List *readFromFile(const char *fileName) {
         } else {
             if (lineSize == CAPACITY) {
                 char *newLine = realloc(line, (lineSize + CAPACITY) * sizeof(char));
-                if (newLine == NULL) {
+                char *newName = realloc(name, (lineSize + CAPACITY) * sizeof(char));
+                char *newPhone = realloc(phone, (lineSize + CAPACITY) * sizeof(char));
+                if (newLine == NULL || newName == NULL || newPhone == NULL) {
+                    free(name);
+                    free(phone);
+                    free(line);
                     return NULL;
                 } else {
                     line = newLine;
+                    name = newName;
+                    phone = newPhone;
                     lineSize = lineSize + CAPACITY;
                 }
             }
             line[index++] = c;
         }
     }
-
+    free(name);
+    free(phone);
+    free(line);
     fclose(file);
     return list;
+}
+
+char *getHeadName(List *list) {
+    return list->head->name;
+}
+
+char *getPhoneName(List *list) {
+    return list->head->phone;
 }
 
 void printList(List *list) {

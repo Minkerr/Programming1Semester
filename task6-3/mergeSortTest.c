@@ -1,54 +1,66 @@
-#include "mergeSort.h"
+#include "mergeSort.c"
 #include "list.h"
 #include <string.h>
 #include <stdio.h>
 
 bool testMergeSortCommonCaseName() {
     List *list = readFromFile("task6-3/input.txt");
-    List *sortedList = mergeSort(list, NAME);
-    bool res = true;
-    if (strcmp(sortedList->head->name, "John") != 0) {
-        res = false;
+    List *temp = mergeSort(list, NAME);
+    if (temp != NULL) {
+        list = temp;
+    } else {
+        deleteList(&list);
+        return false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "Mike") != 0) {
-        res = false;
+    bool result = true;
+    if (strcmp(getHeadName(list), "John") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "Simone") != 0) {
-        res = false;
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "Mike") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "Tommy") != 0) {
-        res = false;
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "Simone") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "Tommy") != 0) {
+        result = false;
+    }
+    deleteHead(&list);
 
-    return res;
+    return result;
 }
 
 bool testMergeSortCommonCasePhone() {
     List *list = readFromFile("task6-3/input.txt");
-    List *sortedList = mergeSort(list, PHONE);
-    bool res = true;
-    if (strcmp(sortedList->head->name, "Simone") != 0) {
-        res = false;
+    List *temp = mergeSort(list, PHONE);
+    if (temp != NULL) {
+        list = temp;
+    } else {
+        deleteList(&list);
+        return false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "John") != 0) {
-        res = false;
+    bool result = true;
+    if (strcmp(getHeadName(list), "Simone") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "Tommy") != 0) {
-        res = false;
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "John") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
-    if (strcmp(sortedList->head->name, "Mike") != 0) {
-        res = false;
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "Tommy") != 0) {
+        result = false;
     }
-    deleteHead(sortedList);
+    deleteHead(&list);
+    if (strcmp(getHeadName(list), "Mike") != 0) {
+        result = false;
+    }
+    deleteHead(&list);
 
-    return res;
+    return result;
 }
 
 bool testEmptyList() {

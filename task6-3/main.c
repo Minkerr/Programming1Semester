@@ -1,4 +1,4 @@
-#include "mergeSortTest.h"
+#include "mergeSortTest.c"
 
 int main() {
     return runAllTestsForTask6();
