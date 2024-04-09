@@ -13,7 +13,7 @@ Tree *parseTreeFromString(char *str);
 void printTree(Tree *tree);
 
 // calculate the value of expression in tree
-int calculate(Tree *tree);
+int calculate(Tree *tree, int* errorCode);
 
 // delete tree and free memory
 void deleteTree(Tree **tree);

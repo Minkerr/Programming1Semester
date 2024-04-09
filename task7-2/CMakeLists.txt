@@ -3,4 +3,4 @@ project(task7-2 C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(task7-2 main.c expressionTree.c expressionTree.h)
+add_executable(task7-2 main.c expressionTree.c expressionTreeTest.c)

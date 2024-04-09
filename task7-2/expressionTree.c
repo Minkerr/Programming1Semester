@@ -130,31 +130,44 @@ void printTree(Tree *tree) {
     printf("\n");
 }
 
-int calculateRec(Node *node) {
+int calculateRec(Node *node, int *errorCode) {
     if (isNodeANumber(node)) {
         return node->number;
     } else {
         char operation = node->operation;
+        int leftResult = calculateRec(node->left, errorCode);
+        if (*errorCode == -1) {
+            return 0;
+        }
+        int rightResult = calculateRec(node->right, errorCode);
+        if (*errorCode == -1) {
+            return 0;
+        }
         switch (operation) {
             case '+':
-                return calculateRec(node->left) + calculateRec(node->right);
+                return leftResult + rightResult;
             case '/':
-                return calculateRec(node->left) / calculateRec(node->right);
+                if (rightResult == 0) {
+                    *errorCode = -1;
+                    return 0;
+                }
+                return leftResult / rightResult;
             case '*':
-                return calculateRec(node->left) * calculateRec(node->right);
+                return leftResult * rightResult;
             default:
-                return calculateRec(node->left) - calculateRec(node->right);
+                return leftResult - rightResult;
         }
     }
 
 }
 
-int calculate(Tree *tree) {
+int calculate(Tree *tree, int *errorCode) {
     if (tree == NULL) {
-        printf("Tree is NULL");
-        return 0;
+        return -1;
     }
-    return calculateRec(tree->root);
+    int code = 0;
+    int result = calculateRec(tree->root, &code);
+    return result;
 }
 
 void deleteTreeRecursive(Node *node) {
