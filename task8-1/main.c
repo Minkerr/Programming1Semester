@@ -38,9 +38,12 @@ void printMenu() {
 }
 
 int main() {
-    Tree *tree = initTree();
-    bool shouldClimbUp = true;
     if (!runAllTestsForTask8()) {
+        return -1;
+    }
+    Tree *tree = initTree();
+    if (tree == NULL) {
+        printf("Tree initialization error");
         return -1;
     }
     int command = 0;
@@ -58,14 +61,12 @@ int main() {
                 key = readStringFromConsole();
                 printf("Enter the value: \n");
                 val = readStringFromConsole();
-                bool shouldClimbUp = true;
-                tree = insert(tree, key, val, &shouldClimbUp);
+                tree = insert(tree, key, val);
                 break;
             case 2:
                 printf("Enter the key: \n");
                 key = readStringFromConsole();
-                shouldClimbUp = true;
-                tree = deleteNode(tree, key, &shouldClimbUp);
+                tree = deleteNode(tree, key);
                 break;
             case 3:
                 printf("Enter the key: \n");

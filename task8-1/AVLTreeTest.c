@@ -5,18 +5,12 @@
 
 Tree *setUpTree(void) {
     Tree *tree = initTree();
-    bool shouldClimbUp = true;
-    tree = insert(tree, "A", "AAA", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = insert(tree, "E", "EEE", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = insert(tree, "C", "CCC", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = insert(tree, "B", "BBB", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = insert(tree, "D", "DDD", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = insert(tree, "F", "FFF", &shouldClimbUp);
+    tree = insert(tree, "A", "AAA");
+    tree = insert(tree, "E", "EEE");
+    tree = insert(tree, "C", "CCC");
+    tree = insert(tree, "B", "BBB");
+    tree = insert(tree, "D", "DDD");
+    tree = insert(tree, "F", "FFF");
     return tree;
 }
 
@@ -37,21 +31,16 @@ bool testFindNonExistingKey(void) {
 
 bool testInsertAnExistingKey() {
     Tree *tree = setUpTree();
-    bool shouldClimbUp = true;
-    tree = insert(tree, "A", "X", &shouldClimbUp);
+    tree = insert(tree, "A", "X");
     return findValueByKey(tree, "A")[0] == 'X';
 }
 
 bool testDelete(void) {
     Tree *tree = setUpTree();
-    bool shouldClimbUp = true;
-    tree = deleteNode(tree, "A", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = deleteNode(tree, "C", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = deleteNode(tree, "B", &shouldClimbUp);
-    shouldClimbUp = true;
-    tree = deleteNode(tree, "F", &shouldClimbUp);
+    tree = deleteNode(tree, "A");
+    tree = deleteNode(tree, "C");
+    tree = deleteNode(tree, "B");
+    tree = deleteNode(tree, "F");
     return findValueByKey(tree, "A") == NULL
            && findValueByKey(tree, "B") == NULL
            && findValueByKey(tree, "C") == NULL

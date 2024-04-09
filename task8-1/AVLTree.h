@@ -9,10 +9,10 @@ typedef struct Tree Tree;
 Tree *initTree();
 
 // Insert new node to tree. Returns new root
-Tree *insert(Tree *tree, char *key, char *value, bool *shouldClimbUp);
+Tree *insert(Tree *tree, char *key, char *value);
 
 // Delete node from tree by value. Returns new root
-Tree *deleteNode(Tree *tree, char *key, bool *shouldClimbUp);
+Tree *deleteNode(Tree *tree, char *key);
 
 // print to console all keys and values from tree
 void printTree(Tree *tree);

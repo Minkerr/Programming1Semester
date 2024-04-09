@@ -183,8 +183,9 @@ Node *insertRecursive(Node *node, char *key, char *value, bool *shouldClimbUp) {
     return balance(node);
 }
 
-Tree *insert(Tree *tree, char *key, char *value, bool *shouldClimbUp) {
-    Node *temp = insertRecursive(tree->root, key, value, shouldClimbUp);
+Tree *insert(Tree *tree, char *key, char *value) {
+    bool shouldClimbUp = true;
+    Node *temp = insertRecursive(tree->root, key, value, &shouldClimbUp);
     if (temp != NULL) {
         tree->root = temp;
     }
@@ -231,8 +232,9 @@ Node *deleteNodeRecursive(Node *node, char *key, bool *shouldClimbUp) {
     return balance(node);
 }
 
-Tree *deleteNode(Tree *tree, char *key, bool *shouldClimbUp) {
-    Node *temp = deleteNodeRecursive(tree->root, key, shouldClimbUp);
+Tree *deleteNode(Tree *tree, char *key) {
+    bool shouldClimbUp = true;
+    Node *temp = deleteNodeRecursive(tree->root, key, &shouldClimbUp);
     if (temp != NULL) {
         tree->root = temp;
     }
