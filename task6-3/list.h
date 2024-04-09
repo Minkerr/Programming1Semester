@@ -2,11 +2,6 @@
 
 #include "stdbool.h"
 
-// parameters by which the list can be sorted
-typedef enum SortingKey {
-    NAME, PHONE
-} SortingKey;
-
 // contains head and tail of linked list
 typedef struct List List;
 
@@ -20,7 +15,7 @@ bool isEmpty(List *list);
 int add(List *list, char *name, char *phone);
 
 // delete list head and free the memory it used
-void deleteHead(List **list);
+void deleteHead(List *list);
 
 // delete list and free the memory it used
 void deleteList(List **list);

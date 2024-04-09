@@ -1,4 +1,4 @@
-#include "list.c"
+#include "list.h"
 #include "mergeSort.h"
 #include <string.h>
 
@@ -7,7 +7,7 @@ List *mergeTwoListsByKey(List *first, List *second, enum SortingKey sortingKey) 
 
     while (listLength(first) != 0 && listLength(second) != 0) {
         int comparisonResult = sortingKey == PHONE ? strcmp(getPhoneName(first), getPhoneName(second))
-                                                   : strcmp(getHeadName(first), getHeadName(second));
+                : strcmp(getHeadName(first), getHeadName(second));
         if (comparisonResult < 0) {
             moveHeadToNewList(mergedList, first);
         } else {

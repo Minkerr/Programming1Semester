@@ -1,10 +1,12 @@
-#include "mergeSort.c"
+#include "mergeSortTest.h"
+#include "mergeSort.h"
 #include "list.h"
+#include "errorCode.h"
 #include <string.h>
 #include <stdio.h>
 
 bool testMergeSortCommonCaseName() {
-    List *list = readFromFile("task6-3/input.txt");
+    List *list = readFromFile("C:\\Users\\valen\\CLionProjects\\Programming1Semester\\task6-3\\input.txt");
     List *temp = mergeSort(list, NAME);
     if (temp != NULL) {
         list = temp;
@@ -16,25 +18,25 @@ bool testMergeSortCommonCaseName() {
     if (strcmp(getHeadName(list), "John") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "Mike") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "Simone") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "Tommy") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
 
     return result;
 }
 
 bool testMergeSortCommonCasePhone() {
-    List *list = readFromFile("task6-3/input.txt");
+    List *list = readFromFile("C:\\Users\\valen\\CLionProjects\\Programming1Semester\\task6-3\\input.txt");
     List *temp = mergeSort(list, PHONE);
     if (temp != NULL) {
         list = temp;
@@ -46,19 +48,19 @@ bool testMergeSortCommonCasePhone() {
     if (strcmp(getHeadName(list), "Simone") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "John") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "Tommy") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
     if (strcmp(getHeadName(list), "Mike") != 0) {
         result = false;
     }
-    deleteHead(&list);
+    deleteHead(list);
 
     return result;
 }

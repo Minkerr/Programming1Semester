@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 #define CAPACITY 256
 
@@ -57,17 +56,14 @@ int add(List *list, char *name, char *phone) {
     return 0;
 }
 
-void deleteHead(List **list) {
-    if (!isEmpty(*list)) {
-        (*list)->length--;
-        Node *tempHead = (*list)->head;
-        (*list)->head = (*list)->head->next;
+void deleteHead(List *list) {
+    if (!isEmpty(list)) {
+        list->length--;
+        Node *tempHead = list->head;
+        list->head = list->head->next;
         free(tempHead->phone);
         free(tempHead->name);
         free(tempHead);
-    } else {
-        free(*list);
-        *list = NULL;
     }
 }
 
@@ -84,12 +80,15 @@ void deleteList(List **list) {
 }
 
 int listLength(List *list) {
+    if (list == NULL) {
+        return 0;
+    }
     return list->length;
 }
 
 void moveHeadToNewList(List *newList, List *oldList) {
     add(newList, oldList->head->name, oldList->head->phone);
-    deleteHead(&oldList);
+    deleteHead(oldList);
 }
 
 List *readFromFile(const char *fileName) {
