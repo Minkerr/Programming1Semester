@@ -12,7 +12,7 @@ typedef struct HashTable {
 } HashTable;
 
 HashTable *initTable() {
-    HashTable *table = malloc(sizeof(HashTable));
+    HashTable *table = calloc(1, sizeof(HashTable));
     if (table == NULL) {
         return NULL;
     }
